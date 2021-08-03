@@ -93,10 +93,10 @@
             </objects>
             <point key="canvasLocation" x="131.8840579710145" y="103.79464285714285"/>
         </scene>
-        <!--View Controller-->
+        <!--Temperature View Controller-->
         <scene sceneID="yAc-8A-aI3">
             <objects>
-                <viewController id="Aek-Dc-uD0" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TemperatureViewController" id="Aek-Dc-uD0" customClass="TemperatureViewController" customModule="Weather" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rp8-AW-P4h">
                         <rect key="frame" x="0.0" y="0.0" width="374" height="200"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -109,19 +109,19 @@
                             </label>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="naF-fb-B8p">
                                 <rect key="frame" x="0.0" y="52" width="374" height="148"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="148" id="AFr-HM-fVS"/>
                                 </constraints>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="8T6-Vl-lS7">
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="8T6-Vl-lS7">
                                     <size key="itemSize" width="100" height="153"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="i4O-HO-CAt">
-                                        <rect key="frame" x="0.0" y="0.0" width="100" height="153"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TemperatureCell" id="i4O-HO-CAt" customClass="TemperatureCell" customModule="Weather" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="-2.5" width="100" height="153"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="NuS-FX-SZ4">
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="153"/>
@@ -158,8 +158,17 @@
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="100" height="153"/>
+                                        <connections>
+                                            <outlet property="temperatureLabel" destination="Z96-l7-eAf" id="gCC-k2-YpF"/>
+                                            <outlet property="timeLabel" destination="Hhu-UV-4Jz" id="pVW-3N-K7s"/>
+                                            <outlet property="weatherImage" destination="Riz-81-XRe" id="Xt9-dE-RCh"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="Aek-Dc-uD0" id="XXp-qj-jgG"/>
+                                    <outlet property="delegate" destination="Aek-Dc-uD0" id="Ts7-Cv-rOB"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemIndigoColor"/>
