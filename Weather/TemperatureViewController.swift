@@ -9,11 +9,13 @@ import UIKit
 
 class TemperatureViewController: UIViewController {
 
+    let viewModel = HourlyViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        viewModel.fetchData()
     }
+    
 }
 
 extension TemperatureViewController: UICollectionViewDataSource {
@@ -41,5 +43,30 @@ class TemperatureCell: UICollectionViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
     
-    
+}
+
+class HourlyViewModel {
+    var HourlyList:[Hourly]=[]
+    func fetchData(){
+        WeatherService().getWeather { result in
+            print("위도 : \(result.lat), 경도 : \(result.lon)")
+//            print("--> ", result.hourly)
+            let hourlyCnt:Int = result.hourly.count
+            for i in 0..<hourlyCnt{
+                print("\(i)번째 data : \(result.hourly[i])")
+                self.HourlyList.append(Hourly(dt: result.hourly[i].dt, temp: result.hourly[i].temp, humidity: result.hourly[i].humidity))
+            }
+        }
+    }
+}
+private var apiKey:String{
+    get {
+        guard let filePath = Bundle.main.path(forResource: "KeyList", ofType: "plist")
+        else { fatalError("Couldnt find file 'KeyList.plist !!") }
+        let plist = NSDictionary(contentsOfFile: filePath)
+        guard let value = plist?.object(forKey: "OPENWEATHERMAP_KEY") as? String else {
+            fatalError("Couldn't find key 'Openweathermap_key' in Keylist.plist")
+        }
+        return value;
+    }
 }

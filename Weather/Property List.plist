@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!--
-   Property List.plist
-   Weather
-
-   Created by YOONJONG on 2021/08/05.
-   Copyright (c) 2021 ___ORGANIZATIONNAME___. All rights reserved.
--->
 <plist version="1.0">
-<dict/>
+<dict>
+	<key>OPENWEATHERMAP_KEY</key>
+	<string>eb70946e865f0ed18c6eb6e2a4a39651</string>
+</dict>
 </plist>

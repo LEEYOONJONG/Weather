@@ -171,6 +171,7 @@
                                 </connections>
                             </collectionView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="AuS-qp-ksf"/>
                         <color key="backgroundColor" systemColor="systemIndigoColor"/>
                         <constraints>
                             <constraint firstItem="ucu-JT-Ky8" firstAttribute="top" secondItem="rp8-AW-P4h" secondAttribute="top" constant="23" id="GWq-Mz-jgK"/>
