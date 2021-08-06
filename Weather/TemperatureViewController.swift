@@ -79,12 +79,9 @@ class TemperatureCell: UICollectionViewCell {
         dateFormatter.timeZone = TimeZone(abbreviation: "KST")
         dateFormatter.dateFormat = "MM-dd HH:mm"
         let stringDate = dateFormatter.string(from: date) // UNIX timestamp 형식을 KST로 변환
-//        print("--> weather : \(info)")
-        let url = URL(string: "https://openweathermap.org/img/wn/\(info.weather[0].icon)@2x.png")
-//        print("--> url : \(url!)")
-        if let data = try? Data(contentsOf: url!) {
-            weatherImage.image = UIImage(data: data)
-        }
+        print("--> weather icon : \(info.weather[0].icon)")
+        
+        weatherImage.image = UIImage(named: "\(info.weather[0].icon)@4x.png")
         timeLabel.text = "\(stringDate)"
         temperatureLabel.text = "\(info.temp)º"
         humidityLabel.text = "\(info.humidity)%"
