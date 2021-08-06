@@ -18,9 +18,9 @@ class TemperatureViewController: UIViewController {
         super.viewDidLoad()
         temperatureCollectionView.delegate = self
         
-        hello()
+        fetchWeather()
     }
-    func hello(){
+    func fetchWeather(){
         let session = URLSession(configuration: URLSessionConfiguration.default)
         print("getWeather called")
         // API 호출을 위한 URL
@@ -32,12 +32,10 @@ class TemperatureViewController: UIViewController {
             
             let decoder = JSONDecoder()
             if let response = try? decoder.decode(WeatherResponse.self, from: resultData){
-                print("위도 : \(response.lat), 경도 : \(response.lon)")
                 let hourlyCnt:Int = response.hourly.count
-                print("--> ", hourlyCnt)
                 for i in 0..<hourlyCnt{
                     print("\(i)번째 data : \(response.hourly[i])")
-                    self.viewModel.HourlyList.append(Hourly(dt: response.hourly[i].dt, temp: response.hourly[i].temp, humidity: response.hourly[i].humidity))
+                    self.viewModel.HourlyList.append(Hourly(dt: response.hourly[i].dt, temp: response.hourly[i].temp, humidity: response.hourly[i].humidity, weather: response.hourly[i].weather))
                 }
                 DispatchQueue.main.sync{
                     self.temperatureCollectionView.reloadData()
@@ -73,32 +71,29 @@ class TemperatureCell: UICollectionViewCell {
     @IBOutlet weak var weatherImage: UIImageView!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var temperatureLabel: UILabel!
+    @IBOutlet weak var humidityLabel: UILabel!
     
     func update(info:Hourly){
         let date = Date(timeIntervalSince1970: TimeInterval(info.dt))
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone(abbreviation: "KST")
-        dateFormatter.dateFormat = "yy-MM-dd HH:mm"
+        dateFormatter.dateFormat = "MM-dd HH:mm"
         let stringDate = dateFormatter.string(from: date) // UNIX timestamp 형식을 KST로 변환
+//        print("--> weather : \(info)")
+        let url = URL(string: "https://openweathermap.org/img/wn/\(info.weather[0].icon)@2x.png")
+//        print("--> url : \(url!)")
+        if let data = try? Data(contentsOf: url!) {
+            weatherImage.image = UIImage(data: data)
+        }
         timeLabel.text = "\(stringDate)"
-        temperatureLabel.text = "\(info.temp)"
+        temperatureLabel.text = "\(info.temp)º"
+        humidityLabel.text = "\(info.humidity)%"
     }
 }
 
 class HourlyViewModel {
     var HourlyList:[Hourly]=[]
-    func fetchData() -> Void{
-        WeatherService().getWeather { result in
-            print("위도 : \(result.lat), 경도 : \(result.lon)")
-            //            print("--> ", result.hourly)
-            let hourlyCnt:Int = result.hourly.count
-            for i in 0..<hourlyCnt{
-                print("\(i)번째 data : \(result.hourly[i])")
-                
-                self.HourlyList.append(Hourly(dt: result.hourly[i].dt, temp: result.hourly[i].temp, humidity: result.hourly[i].humidity))
-            }
-        }
-    }
+    
 }
 private var apiKey:String{
     get {

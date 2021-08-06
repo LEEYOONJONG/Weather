@@ -11,4 +11,9 @@ struct Hourly: Decodable{
     let dt:Int
     let temp:Double
     let humidity:Int
+    let weather:[Weather]
+}
+
+struct Weather: Decodable{
+    let icon:String
 }
