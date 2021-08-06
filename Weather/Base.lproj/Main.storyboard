@@ -181,6 +181,9 @@
                             <constraint firstItem="ucu-JT-Ky8" firstAttribute="leading" secondItem="rp8-AW-P4h" secondAttribute="leading" constant="25" id="sRj-6x-BRO"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="temperatureCollectionView" destination="naF-fb-B8p" id="DaG-gs-Zx9"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MeT-zf-ilL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
