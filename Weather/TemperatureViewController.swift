@@ -9,16 +9,44 @@ import UIKit
 import Foundation
 
 class TemperatureViewController: UIViewController {
-
+    
     @IBOutlet weak var temperatureCollectionView: UICollectionView!
     
     let viewModel = HourlyViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        temperatureCollectionView.delegate = self
+        
+        hello()
     }
-    
+    func hello(){
+        let session = URLSession(configuration: URLSessionConfiguration.default)
+        print("getWeather called")
+        // API 호출을 위한 URL
+        
+        let url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=37.491&lon=126.980&exclude=minutely,daily&appid=eb70946e865f0ed18c6eb6e2a4a39651&units=metric")
+        let dataTask = session.dataTask(with: url!){ (data, response, error) in
+            guard error == nil else { return }
+            guard let resultData = data else { return }
+            
+            let decoder = JSONDecoder()
+            if let response = try? decoder.decode(WeatherResponse.self, from: resultData){
+                print("위도 : \(response.lat), 경도 : \(response.lon)")
+                let hourlyCnt:Int = response.hourly.count
+                print("--> ", hourlyCnt)
+                for i in 0..<hourlyCnt{
+                    print("\(i)번째 data : \(response.hourly[i])")
+                    self.viewModel.HourlyList.append(Hourly(dt: response.hourly[i].dt, temp: response.hourly[i].temp, humidity: response.hourly[i].humidity))
+                }
+                DispatchQueue.main.sync{
+                    self.temperatureCollectionView.reloadData()
+                }
+                
+            }
+        }
+        dataTask.resume()
+    }
 }
 
 extension TemperatureViewController: UICollectionViewDataSource {
@@ -47,7 +75,12 @@ class TemperatureCell: UICollectionViewCell {
     @IBOutlet weak var temperatureLabel: UILabel!
     
     func update(info:Hourly){
-        timeLabel.text = "\(info.dt)"
+        let date = Date(timeIntervalSince1970: TimeInterval(info.dt))
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "KST")
+        dateFormatter.dateFormat = "yy-MM-dd HH:mm"
+        let stringDate = dateFormatter.string(from: date) // UNIX timestamp 형식을 KST로 변환
+        timeLabel.text = "\(stringDate)"
         temperatureLabel.text = "\(info.temp)"
     }
 }
@@ -57,16 +90,11 @@ class HourlyViewModel {
     func fetchData() -> Void{
         WeatherService().getWeather { result in
             print("위도 : \(result.lat), 경도 : \(result.lon)")
-//            print("--> ", result.hourly)
+            //            print("--> ", result.hourly)
             let hourlyCnt:Int = result.hourly.count
             for i in 0..<hourlyCnt{
                 print("\(i)번째 data : \(result.hourly[i])")
-//                let date = Date(timeIntervalSince1970: TimeInterval(result.hourly[i].dt))
-//                let dateFormatter = DateFormatter()
-//                dateFormatter.timeZone = TimeZone(abbreviation: "KST")
-//                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
-//                let stringDate = dateFormatter.string(from: date) // UNIX timestamp 형식을 KST로 변환
-//                print("date: ", stringDate)
+                
                 self.HourlyList.append(Hourly(dt: result.hourly[i].dt, temp: result.hourly[i].temp, humidity: result.hourly[i].humidity))
             }
         }

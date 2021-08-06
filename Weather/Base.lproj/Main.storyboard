@@ -182,7 +182,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="temperatureCollectionView" destination="naF-fb-B8p" id="DaG-gs-Zx9"/>
+                        <outlet property="temperatureCollectionView" destination="naF-fb-B8p" id="nBE-th-OLb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MeT-zf-ilL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
