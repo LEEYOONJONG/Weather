@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
         fetchToday()
         
     }
@@ -47,8 +48,8 @@ extension ViewController{
                 DispatchQueue.main.sync {
                     self.todayImage.image = UIImage(named: "\(response.current.weather[0].icon)@4x.png")
                     self.nowTempLabel.text = "\(response.current.temp)º"
-                    self.highTempLabel.text = "최고:\(response.daily[0].temp.max)º"
-                    self.lowTempLabel.text = "최저:\(response.daily[0].temp.min)º"
+                    self.highTempLabel.text = "최고 : \(response.daily[0].temp.max)º"
+                    self.lowTempLabel.text = "최저 : \(response.daily[0].temp.min)º"
                 }
                 
             }
