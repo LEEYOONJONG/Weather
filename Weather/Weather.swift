@@ -17,3 +17,24 @@ struct Hourly: Decodable{
 struct Weather: Decodable{
     let icon:String
 }
+
+struct TodayResponse: Decodable{
+    let timezone:String
+    let lat: Double
+    let lon: Double
+    let current:Current
+    let daily:[Daily]
+}
+struct Current: Decodable{
+    let dt:Int
+    let temp:Double
+    let weather:[Weather]
+}
+struct Daily: Decodable{
+    let dt:Int
+    let temp:Temp
+}
+struct Temp: Decodable{
+    let min:Double
+    let max:Double
+}

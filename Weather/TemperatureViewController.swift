@@ -43,7 +43,7 @@ class TemperatureViewController: UIViewController {
             if let response = try? decoder.decode(WeatherResponse.self, from: resultData){
                 let hourlyCnt:Int = response.hourly.count
                 for i in 0..<hourlyCnt{
-                    print("\(i)번째 data : \(response.hourly[i])")
+//                    print("\(i)번째 data : \(response.hourly[i])")
                     self.viewModel.HourlyList.append(Hourly(dt: response.hourly[i].dt, temp: response.hourly[i].temp, humidity: response.hourly[i].humidity, weather: response.hourly[i].weather))
                 }
                 DispatchQueue.main.sync{
@@ -101,14 +101,14 @@ class HourlyViewModel {
     var HourlyList:[Hourly]=[]
     
 }
-private var apiKey:String{
-    get {
-        guard let filePath = Bundle.main.path(forResource: "KeyList", ofType: "plist")
-        else { fatalError("Couldnt find file 'KeyList.plist !!") }
-        let plist = NSDictionary(contentsOfFile: filePath)
-        guard let value = plist?.object(forKey: "OPENWEATHERMAP_KEY") as? String else {
-            fatalError("Couldn't find key 'Openweathermap_key' in Keylist.plist")
-        }
-        return value;
-    }
-}
+//private var apiKey:String{
+//    get {
+//        guard let filePath = Bundle.main.path(forResource: "KeyList", ofType: "plist")
+//        else { fatalError("Couldnt find file 'KeyList.plist !!") }
+//        let plist = NSDictionary(contentsOfFile: filePath)
+//        guard let value = plist?.object(forKey: "OPENWEATHERMAP_KEY") as? String else {
+//            fatalError("Couldn't find key 'Openweathermap_key' in Keylist.plist")
+//        }
+//        return value;
+//    }
+//}
