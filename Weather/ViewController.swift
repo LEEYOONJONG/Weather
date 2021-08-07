@@ -10,6 +10,7 @@ import Foundation
 import CoreLocation
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
+    @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var todayImage: UIImageView!
     @IBOutlet weak var nowTempLabel: UILabel!
     @IBOutlet weak var highTempLabel: UILabel!
@@ -48,6 +49,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             print("---> ", LocationService.shared.longitude!, LocationService.shared.latitude!)
             if let lon = LocationService.shared.longitude, let lat = LocationService.shared.latitude {
                 fetchToday(lat, lon)
+                //
+                let findLocation = CLLocation(latitude: lat, longitude: lon)
+                let geocoder = CLGeocoder()
+                let locale = Locale(identifier: "Ko-kr") //원하는 언어의 나라 코드를 넣어주시면 됩니다.
+                geocoder.reverseGeocodeLocation(findLocation, preferredLocale: locale, completionHandler: {(placemarks, error) in
+                    if let address: [CLPlacemark] = placemarks {
+                        // 주소를 String으로
+                        let locationString = String("\(address.last!.administrativeArea!) \(address.last!.locality!) \(address.last!.thoroughfare!)")
+                        self.locationLabel.text = locationString
+                        
+                    }
+                })
             }
         }
     }
@@ -72,7 +85,7 @@ extension ViewController{
             guard error == nil else { return }
             guard let resultData = data else { return }
             print("ResultData : \(resultData)")
-//            print(String(decoding:data!, as:UTF8.self))
+            //            print(String(decoding:data!, as:UTF8.self))
             let decoder = JSONDecoder()
             if let response = try? decoder.decode(TodayResponse.self, from: resultData){
                 print("today : \(response)")

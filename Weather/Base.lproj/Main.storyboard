@@ -132,6 +132,7 @@
                     <size key="freeformSize" width="414" height="1600"/>
                     <connections>
                         <outlet property="highTempLabel" destination="uYI-fD-ejo" id="s6e-N2-Qyz"/>
+                        <outlet property="locationLabel" destination="jZZ-mc-U0Q" id="oxd-qY-nKc"/>
                         <outlet property="lowTempLabel" destination="gbW-mP-PyH" id="HEx-ug-Mwn"/>
                         <outlet property="nowTempLabel" destination="JLd-sx-TNi" id="fFh-zO-lcs"/>
                         <outlet property="todayImage" destination="eh9-ef-FDZ" id="biE-DM-NWt"/>
