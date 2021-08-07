@@ -133,19 +133,19 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="시각" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hhu-UV-4Jz">
-                                                    <rect key="frame" x="35.5" y="93" width="19.5" height="13.5"/>
+                                                    <rect key="frame" x="35.5" y="85" width="19.5" height="13.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="온도" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z96-l7-eAf">
-                                                    <rect key="frame" x="29.5" y="106.5" width="31.5" height="21"/>
+                                                    <rect key="frame" x="29.5" y="98.5" width="31.5" height="21"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="습도" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oAN-E5-99D">
-                                                    <rect key="frame" x="32" y="127" width="26" height="18"/>
+                                                    <rect key="frame" x="32" y="119" width="26" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -161,7 +161,7 @@
                                             <constraint firstItem="Z96-l7-eAf" firstAttribute="top" secondItem="Hhu-UV-4Jz" secondAttribute="bottom" id="nta-Jl-z3O"/>
                                             <constraint firstAttribute="trailing" secondItem="Riz-81-XRe" secondAttribute="trailing" id="prY-HR-Crt"/>
                                             <constraint firstItem="oAN-E5-99D" firstAttribute="top" secondItem="Z96-l7-eAf" secondAttribute="bottom" constant="-0.5" id="rwg-SP-hna"/>
-                                            <constraint firstItem="Hhu-UV-4Jz" firstAttribute="top" secondItem="Riz-81-XRe" secondAttribute="bottom" constant="3" id="tDN-xT-xUn"/>
+                                            <constraint firstItem="Hhu-UV-4Jz" firstAttribute="top" secondItem="Riz-81-XRe" secondAttribute="bottom" constant="-5" id="tDN-xT-xUn"/>
                                         </constraints>
                                         <size key="customSize" width="90" height="148.5"/>
                                         <connections>
