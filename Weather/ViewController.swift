@@ -7,18 +7,49 @@
 
 import UIKit
 import Foundation
-class ViewController: UIViewController {
+import CoreLocation
+class ViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBOutlet weak var todayImage: UIImageView!
     @IBOutlet weak var nowTempLabel: UILabel!
     @IBOutlet weak var highTempLabel: UILabel!
     @IBOutlet weak var lowTempLabel: UILabel!
+    
+    var locationManager:CLLocationManager?
+    var currentLocation:CLLocationCoordinate2D!
+    var latitude:Double?
+    var longitude:Double?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        requestAuthorization()
         
-        fetchToday()
         
+    }
+    private func requestAuthorization(){
+        if locationManager == nil {
+            print("nil 진입")
+            locationManager = CLLocationManager()
+            locationManager!.delegate = self
+            locationManager!.requestWhenInUseAuthorization()
+            locationManager!.desiredAccuracy = kCLLocationAccuracyBest
+            locationManagerDidChangeAuthorization(locationManager!)
+        } else {
+            print("not nil일 때")
+            locationManager!.startMonitoringSignificantLocationChanges()
+        }
+    }
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        if manager.authorizationStatus == .authorizedWhenInUse {
+            currentLocation = locationManager!.location?.coordinate
+            LocationService.shared.longitude = currentLocation.longitude
+            LocationService.shared.latitude = currentLocation.latitude
+            print("---> ", LocationService.shared.longitude!, LocationService.shared.latitude!)
+            if let lon = LocationService.shared.longitude, let lat = LocationService.shared.latitude {
+                fetchToday(lat, lon)
+            }
+        }
     }
 }
 extension ViewController{
@@ -33,9 +64,9 @@ extension ViewController{
         }
     }
     
-    func fetchToday(){
+    func fetchToday(_ lat:Double, _ lon:Double){
         let session = URLSession(configuration: URLSessionConfiguration.default)
-        let url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=37.491&lon=126.980&exclude=minutely&appid=\(apiKey)&units=metric")
+        let url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=\(lat)&lon=\(lon)&exclude=minutely&appid=\(apiKey)&units=metric")
         print("->", url)
         let dataTask = session.dataTask(with: url!){(data, response, error) in
             guard error == nil else { return }
@@ -60,3 +91,8 @@ extension ViewController{
     }
 }
 
+class LocationService {
+    static var shared = LocationService()
+    var longitude:Double!
+    var latitude:Double!
+}
