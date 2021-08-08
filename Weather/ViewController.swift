@@ -49,7 +49,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             print("---> ", LocationService.shared.longitude!, LocationService.shared.latitude!)
             if let lon = LocationService.shared.longitude, let lat = LocationService.shared.latitude {
                 fetchToday(lat, lon)
-                //
+                // 현재 위치 표시
                 let findLocation = CLLocation(latitude: lat, longitude: lon)
                 let geocoder = CLGeocoder()
                 let locale = Locale(identifier: "Ko-kr") //원하는 언어의 나라 코드를 넣어주시면 됩니다.

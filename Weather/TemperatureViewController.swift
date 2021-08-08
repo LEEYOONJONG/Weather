@@ -86,7 +86,8 @@ class TemperatureCell: UICollectionViewCell {
         let date = Date(timeIntervalSince1970: TimeInterval(info.dt))
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone(abbreviation: "KST")
-        dateFormatter.dateFormat = "MM-dd HH:mm"
+        dateFormatter.locale = Locale(identifier: "ko_KR")
+        dateFormatter.dateFormat = "d일 (E) HH:mm"
         let stringDate = dateFormatter.string(from: date) // UNIX timestamp 형식을 KST로 변환
         print("--> weather icon : \(info.weather[0].icon)")
         
@@ -101,14 +102,4 @@ class HourlyViewModel {
     var HourlyList:[Hourly]=[]
     
 }
-//private var apiKey:String{
-//    get {
-//        guard let filePath = Bundle.main.path(forResource: "KeyList", ofType: "plist")
-//        else { fatalError("Couldnt find file 'KeyList.plist !!") }
-//        let plist = NSDictionary(contentsOfFile: filePath)
-//        guard let value = plist?.object(forKey: "OPENWEATHERMAP_KEY") as? String else {
-//            fatalError("Couldn't find key 'Openweathermap_key' in Keylist.plist")
-//        }
-//        return value;
-//    }
-//}
+
