@@ -29,6 +29,7 @@ class TemperatureViewController: UIViewController {
         fetchWeather()
     }
     
+    // api call
     func fetchWeather(){
         let session = URLSession(configuration: URLSessionConfiguration.default)
         print("getWeather called")
