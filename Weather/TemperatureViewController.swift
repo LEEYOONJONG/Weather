@@ -7,12 +7,18 @@
 
 import UIKit
 import Foundation
+import CoreLocation
 
-class TemperatureViewController: UIViewController {
+class TemperatureViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBOutlet weak var temperatureCollectionView: UICollectionView!
     
     let viewModel = HourlyViewModel()
+    
+    var locationManager:CLLocationManager?
+    var currentLocation:CLLocationCoordinate2D!
+    
+    
     private var apiKey:String{
         get {
             guard let filePath = Bundle.main.path(forResource: "Property List", ofType: "plist")
@@ -26,16 +32,41 @@ class TemperatureViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         temperatureCollectionView.delegate = self
-        fetchWeather()
+//        fetchWeather()
+        requestAuthorization()
     }
-    
+    private func requestAuthorization(){
+        if locationManager == nil {
+            print("nil 진입")
+            locationManager = CLLocationManager()
+            locationManager!.delegate = self
+            locationManager!.requestWhenInUseAuthorization()
+            locationManager!.desiredAccuracy = kCLLocationAccuracyBest
+            locationManagerDidChangeAuthorization(locationManager!)
+        } else {
+            print("not nil일 때")
+            locationManager!.startMonitoringSignificantLocationChanges()
+        }
+    }
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        if manager.authorizationStatus == .authorizedWhenInUse {
+            currentLocation = locationManager!.location?.coordinate
+            LocationService.shared.longitude = currentLocation.longitude
+            LocationService.shared.latitude = currentLocation.latitude
+            print("---> ", LocationService.shared.longitude!, LocationService.shared.latitude!)
+            if let lon = LocationService.shared.longitude, let lat = LocationService.shared.latitude {
+                fetchWeather(lat, lon)
+                
+            }
+        }
+    }
     // api call
-    func fetchWeather(){
+    func fetchWeather(_ lat:Double, _ lon:Double){
         let session = URLSession(configuration: URLSessionConfiguration.default)
         print("getWeather called")
         // API 호출을 위한 URL
         
-        let url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=37.491&lon=126.980&exclude=minutely,daily&appid=\(apiKey)&units=metric")
+        let url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=\(lat)&lon=\(lon)&exclude=minutely,daily&appid=\(apiKey)&units=metric")
         let dataTask = session.dataTask(with: url!){ (data, response, error) in
             guard error == nil else { return }
             guard let resultData = data else { return }
