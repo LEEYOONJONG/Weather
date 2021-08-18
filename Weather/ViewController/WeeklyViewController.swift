@@ -1,24 +1,28 @@
 //
-//  TemperatureViewController.swift
+//  WeeklyViewController.swift
 //  Weather
 //
-//  Created by YOONJONG on 2021/08/03.
+//  Created by YOONJONG on 2021/08/17.
 //
 
 import UIKit
 import Foundation
 import CoreLocation
 
-class TemperatureViewController: UIViewController, CLLocationManagerDelegate {
-    
-    @IBOutlet weak var temperatureCollectionView: UICollectionView!
-    
-    let viewModel = HourlyViewModel()
+class WeeklyViewController: UIViewController, CLLocationManagerDelegate {
+    @IBOutlet weak var weeklyCollectionView: UICollectionView!
     
     var locationManager:CLLocationManager?
     var currentLocation:CLLocationCoordinate2D!
     
+    let viewModel = WeeklyViewModel()
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+//        weeklyCollectionView.delegate = self
+        requestAuthorization()
+        // Do any additional setup after loading the view.
+    }
     private var apiKey:String{
         get {
             guard let filePath = Bundle.main.path(forResource: "Property List", ofType: "plist")
@@ -28,12 +32,6 @@ class TemperatureViewController: UIViewController, CLLocationManagerDelegate {
             guard let value = plist?.object(forKey: "OPENWEATHERMAP_KEY") as? String else { return "" }
             return value
         }
-    }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        temperatureCollectionView.delegate = self
-//        fetchWeather()
-        requestAuthorization()
     }
     private func requestAuthorization(){
         if locationManager == nil {
@@ -53,85 +51,93 @@ class TemperatureViewController: UIViewController, CLLocationManagerDelegate {
             currentLocation = locationManager!.location?.coordinate
             LocationService.shared.longitude = currentLocation.longitude
             LocationService.shared.latitude = currentLocation.latitude
-            print("---> ", LocationService.shared.longitude!, LocationService.shared.latitude!)
+            
             if let lon = LocationService.shared.longitude, let lat = LocationService.shared.latitude {
                 fetchWeather(lat, lon)
                 
             }
         }
     }
-    // api call
+    
     func fetchWeather(_ lat:Double, _ lon:Double){
         let session = URLSession(configuration: URLSessionConfiguration.default)
-        print("getWeather called")
+        print("weeklyVC getWeather called")
         // API 호출을 위한 URL
         
-        let url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=\(lat)&lon=\(lon)&exclude=minutely,daily&appid=\(apiKey)&units=metric")
+        let url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=\(lat)&lon=\(lon)&exclude=minutely&appid=\(apiKey)&units=metric")
+        print("=> weeklyURL = ",url)
         let dataTask = session.dataTask(with: url!){ (data, response, error) in
+//            print("weekly dataTask 진입")
+//            print("=> data : ", data)
             guard error == nil else { return }
             guard let resultData = data else { return }
-            
+            let str = String(decoding: resultData, as: UTF8.self)
+//            print("==> : ", str)
             let decoder = JSONDecoder()
-            if let response = try? decoder.decode(WeatherResponse.self, from: resultData){
-                let hourlyCnt:Int = response.hourly.count
-                for i in 0..<hourlyCnt{
+            if let response = try? decoder.decode(WeeklyResponse.self, from: resultData){
+                let WeeklyCnt:Int = response.daily.count
+                print("weeklycnt : \(WeeklyCnt)")
+                self.viewModel.WeeklyList.removeAll() // 어쩔 수 없이..
+                for i in 0..<WeeklyCnt{
 //                    print("\(i)번째 data : \(response.hourly[i])")
-                    self.viewModel.HourlyList.append(Hourly(dt: response.hourly[i].dt, temp: response.hourly[i].temp, humidity: response.hourly[i].humidity, weather: response.hourly[i].weather))
+                    self.viewModel.WeeklyList.append(Daily(dt: response.daily[i].dt, temp: response.daily[i].temp, weather: response.daily[i].weather))
                 }
                 DispatchQueue.main.sync{
-                    self.temperatureCollectionView.reloadData()
+                    self.weeklyCollectionView.reloadData()
                 }
-                
             }
+
         }
         dataTask.resume()
     }
+   
 }
-
-extension TemperatureViewController: UICollectionViewDataSource {
+extension WeeklyViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.HourlyList.count
+        print("------- list count : ", viewModel.WeeklyList.count)
+        return viewModel.WeeklyList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TemperatureCell", for: indexPath) as? TemperatureCell else { return UICollectionViewCell() }
-        let info = viewModel.HourlyList[indexPath.item]
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeeklyCell", for: indexPath) as? WeeklyCell else { return UICollectionViewCell() }
+        let info = viewModel.WeeklyList[indexPath.item]
         cell.update(info:info)
         return cell;
     }
-    
-    
+}
+extension WeeklyViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width:CGFloat = 360
+        let height:CGFloat = 450
+        let cellHeight:CGFloat = height/CGFloat(viewModel.WeeklyList.count)
+        return CGSize(width: width, height: cellHeight)
+    }
 }
 
-extension TemperatureViewController: UICollectionViewDelegate {
-    // 필요없을듯. 클릭했을때의 동작
-}
-
-
-class TemperatureCell: UICollectionViewCell {
-    @IBOutlet weak var weatherImage: UIImageView!
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var temperatureLabel: UILabel!
-    @IBOutlet weak var humidityLabel: UILabel!
+class WeeklyCell: UICollectionViewCell{
+    @IBOutlet weak var dayLabel: UILabel!
+    @IBOutlet weak var weatherLabel: UIImageView!
+    @IBOutlet weak var hightempLabel: UILabel!
+    @IBOutlet weak var lowtempLabel: UILabel!
     
-    func update(info:Hourly){
+    func update(info:Daily){
         let date = Date(timeIntervalSince1970: TimeInterval(info.dt))
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone(abbreviation: "KST")
         dateFormatter.locale = Locale(identifier: "ko_KR")
-        dateFormatter.dateFormat = "d일 (E) HH:mm"
+        dateFormatter.dateFormat = "E"
         let stringDate = dateFormatter.string(from: date) // UNIX timestamp 형식을 KST로 변환
-        print("--> weather icon : \(info.weather[0].icon)")
+//        print("--> weather icon : \(info.weather[0].icon)")
         
-        weatherImage.image = UIImage(named: "\(info.weather[0].icon)@4x.png")
-        timeLabel.text = "\(stringDate)"
-        temperatureLabel.text = "\(info.temp)º"
-        humidityLabel.text = "\(info.humidity)%"
+        weatherLabel.image = UIImage(named: "\(info.weather[0].icon)@4x.png")
+        hightempLabel.text = "\(Int(info.temp.max))º"
+        lowtempLabel.text = "\(Int(info.temp.min))º"
+        dayLabel.text = "\(stringDate)요일"
     }
+    
 }
-
-class HourlyViewModel {
-    var HourlyList:[Hourly]=[]
+class WeeklyViewModel {
+    var WeeklyList:[Daily]=[]
     
 }
 

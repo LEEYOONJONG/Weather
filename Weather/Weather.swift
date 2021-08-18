@@ -33,8 +33,17 @@ struct Current: Decodable{
 struct Daily: Decodable{
     let dt:Int
     let temp:Temp
+    let weather:[Weather]
 }
 struct Temp: Decodable{
     let min:Double
     let max:Double
+}
+
+struct WeeklyResponse:Decodable{
+    let lat: Double
+    let lon: Double
+    let daily:[Daily]
+    
+    
 }

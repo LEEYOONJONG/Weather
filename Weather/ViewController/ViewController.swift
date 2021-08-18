@@ -30,14 +30,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     private func requestAuthorization(){
         if locationManager == nil {
-            print("nil 진입")
+//            print("nil 진입")
             locationManager = CLLocationManager()
             locationManager!.delegate = self
             locationManager!.requestWhenInUseAuthorization()
             locationManager!.desiredAccuracy = kCLLocationAccuracyBest
             locationManagerDidChangeAuthorization(locationManager!)
         } else {
-            print("not nil일 때")
+//            print("not nil일 때")
             locationManager!.startMonitoringSignificantLocationChanges()
         }
     }
@@ -46,7 +46,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             currentLocation = locationManager!.location?.coordinate
             LocationService.shared.longitude = currentLocation.longitude
             LocationService.shared.latitude = currentLocation.latitude
-            print("---> ", LocationService.shared.longitude!, LocationService.shared.latitude!)
+//            print("---> ", LocationService.shared.longitude!, LocationService.shared.latitude!)
             if let lon = LocationService.shared.longitude, let lat = LocationService.shared.latitude {
                 fetchToday(lat, lon)
                 // 현재 위치 표시
@@ -71,7 +71,7 @@ extension ViewController{
             guard let filePath = Bundle.main.path(forResource: "Property List", ofType: "plist")
             else { return "" }
             let plist = NSDictionary(contentsOfFile: filePath)
-            print("plist : ",plist)
+//            print("plist : ",plist)
             guard let value = plist?.object(forKey: "OPENWEATHERMAP_KEY") as? String else { return "" }
             return value
         }
@@ -84,11 +84,11 @@ extension ViewController{
         let dataTask = session.dataTask(with: url!){(data, response, error) in
             guard error == nil else { return }
             guard let resultData = data else { return }
-            print("ResultData : \(resultData)")
+//            print("ResultData : \(resultData)")
             //            print(String(decoding:data!, as:UTF8.self))
             let decoder = JSONDecoder()
             if let response = try? decoder.decode(TodayResponse.self, from: resultData){
-                print("today : \(response)")
+//                print("today : \(response)")
                 DispatchQueue.main.sync {
                     self.todayImage.image = UIImage(named: "\(response.current.weather[0].icon)@4x.png")
                     self.nowTempLabel.text = "\(response.current.temp)º"
