@@ -119,7 +119,8 @@ class TemperatureCell: UICollectionViewCell {
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone(abbreviation: "KST")
         dateFormatter.locale = Locale(identifier: "ko_KR")
-        dateFormatter.dateFormat = "d일 (E) HH:mm"
+//        dateFormatter.dateFormat = "d일 (E) HH시"
+        dateFormatter.dateFormat = "E요일 HH시"
         let stringDate = dateFormatter.string(from: date) // UNIX timestamp 형식을 KST로 변환
 //        print("--> weather icon : \(info.weather[0].icon)")
         

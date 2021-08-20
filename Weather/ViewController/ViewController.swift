@@ -91,9 +91,9 @@ extension ViewController{
 //                print("today : \(response)")
                 DispatchQueue.main.sync {
                     self.todayImage.image = UIImage(named: "\(response.current.weather[0].icon)@4x.png")
-                    self.nowTempLabel.text = "\(response.current.temp)º"
-                    self.highTempLabel.text = "최고 : \(response.daily[0].temp.max)º"
-                    self.lowTempLabel.text = "최저 : \(response.daily[0].temp.min)º"
+                    self.nowTempLabel.text = "\(Int(response.current.temp))º"
+                    self.highTempLabel.text = "최고 : \(Int(response.daily[0].temp.max))º"
+                    self.lowTempLabel.text = "최저 : \(Int(response.daily[0].temp.min))º"
                 }
                 
             }

@@ -108,7 +108,7 @@ extension WeeklyViewController: UICollectionViewDelegate, UICollectionViewDataSo
 extension WeeklyViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width:CGFloat = 360
-        let height:CGFloat = 450
+        let height:CGFloat = 360
         let cellHeight:CGFloat = height/CGFloat(viewModel.WeeklyList.count)
         return CGSize(width: width, height: cellHeight)
     }
