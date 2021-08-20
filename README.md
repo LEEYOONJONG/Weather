@@ -1,5 +1,6 @@
 # Weather App
 openweathermap 날씨 API를 이용한 날씨 앱
+<img width="400" alt="" src="https://user-images.githubusercontent.com/29617557/130205013-403aeb8b-a945-4334-bab1-95f244ec667b.jpeg">
 
 ## 기능
 현재 위치 정보에 기반하여
@@ -23,4 +24,4 @@ Openweathermap으로부터 받아온 JSON 데이터 중 사용할 데이터만 �
 #### ~~Property List.plist~~
 For hiding API key
 
-![IMG_FAC2DDADBC10-1](https://user-images.githubusercontent.com/29617557/130205013-403aeb8b-a945-4334-bab1-95f244ec667b.jpeg){: width="400"}
+
